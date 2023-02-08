@@ -51,7 +51,7 @@ int main(void)
 		if(ADC0_conersionDone()){
 			counter++;
 			if(counter>100){
-				printf("balls %d\r\n",adcVal);
+				printf("Temp: %d\r\n",adcVal);
 				ledCnt(temp);
 				counter = 0;
 			}
