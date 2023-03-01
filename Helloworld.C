@@ -1,11 +1,13 @@
-# include <avr/io.h>
-#define F_CPU (4000000UL) 
-#define USART3_BAUD_RATE(BAUD_RATE)((float)(64*F_CPU/(16*(float)BAUD_RATE))+ 0.5) 
+//Inkludering 
+#include <avr/io.h> //Inkluderer io bibliotek
+#define F_CPU (4000000UL) //Frekvensen prosessoren går på
+#define USART3_BAUD_RATE(BAUD_RATE)((float)(64*F_CPU/(16*(float)BAUD_RATE)) + 0.5)  //Initialiserer UART
 
-#include <util/delay.h>
-#include <string.h>
+#include <util/delay.h> //Inkluderer bibliotek for delay
+#include <string.h> 
 
-void USART3_init(void);
+//Initialiserer funksjoner
+void USART3_init(void); 
 void USART3_sendChar(char c);
 void USART3_sendString(char *str);
 
@@ -30,7 +32,7 @@ void USART3_init(void)
 	USART3.CTRLB |= USART_TXEN_bm;
 }
 
-void USART3_sendChar(char c)
+void USART3_sendChar(char c) //Funskjon som sender karakterer 
 {
 	while (!(USART3.STATUS & USART_DREIF_bm))
 	{
@@ -39,9 +41,9 @@ void USART3_sendChar(char c)
 	USART3.TXDATAL = c;
 }
 
-void USART3_sendString(char *str)
+void USART3_sendString(char *str) //Sender en string.
 {
-	for(size_t i = 0; i < strlen(str); i++)
+	for(size_t i = 0; i < strlen(str); i++) //Iterer gjennom lengen av stringen
 	{
 		USART3_sendChar(str[i]);
 	}
