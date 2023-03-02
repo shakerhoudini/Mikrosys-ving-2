@@ -8,22 +8,26 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+//ADC
 uint16_t adcVal;
 void ADC0_init(void);
 uint16_t ADC0_read(void);
+uint16_t ADC0_read(void);
+void ADC0_start(void);
+bool ADC0_conersionDone(void);
+
+//USART
 void USART3_init(void);
 static void USART3_sendChar(char c);
 static int USART3_printChar(char c, FILE *stream);
 void USART3_sendString(char *str);
 uint8_t USART_read();
 
-uint16_t ADC0_read(void);
-void ADC0_start(void);
-bool ADC0_conersionDone(void);
+static FILE Usart_stream = FDEV_SETUP_STREAM(USART3_printChar,NULL,_FDEV_SETUP_WRITE);
 
+//LED
 void ledCnt(uint16_t val);
 
-static FILE Usart_stream = FDEV_SETUP_STREAM(USART3_printChar,NULL,_FDEV_SETUP_WRITE);
 
 int main(void)
 {
@@ -103,6 +107,25 @@ uint16_t ADC0_read(void)
 	return ADC0.RES;
 }
 
+// uint16_t ADC0_read(void)
+// {
+// 	/* Clear the interrupt flag by writing 1: */
+// 	ADC0.INTFLAGS = ADC_RESRDY_bm;
+// 	return ADC0.RES;
+// }
+
+void ADC0_start(void)
+{
+	/* Start conversion */
+	ADC0.COMMAND = ADC_STCONV_bm;
+}
+
+bool ADC0_conersionDone(void)
+{
+	return (ADC0.INTFLAGS & ADC_RESRDY_bm);
+}
+
+
 void USART3_init(void)
 {
 	PORTE.DIRSET = 0b11111111;
@@ -135,20 +158,4 @@ void USART3_sendString(char *str)
 static int USART3_printChar(char c, FILE *stream){
 	USART3_sendChar(c);
 	return 0;
-}
-
-// uint16_t ADC0_read(void)
-// {
-// 	/* Clear the interrupt flag by writing 1: */
-// 	ADC0.INTFLAGS = ADC_RESRDY_bm;
-// 	return ADC0.RES;
-// }
-void ADC0_start(void)
-{
-	/* Start conversion */
-	ADC0.COMMAND = ADC_STCONV_bm;
-}
-bool ADC0_conersionDone(void)
-{
-	return (ADC0.INTFLAGS & ADC_RESRDY_bm);
 }
