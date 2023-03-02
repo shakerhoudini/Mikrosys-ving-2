@@ -10,19 +10,20 @@
 #include <stdio.h>
 
 
-//Deklarasjon av funksjoner 
+//ADC
 uint16_t adcVal;
 void ADC0_init(void);
 uint16_t ADC0_read(void);
+
+//USART
 void USART3_init(void);
 static void USART3_sendChar(char c);
 static int USART3_printChar(char c, FILE *stream);
 void USART3_sendString(char *str);
 uint8_t USART_read();
-
 static FILE Usart_stream = FDEV_SETUP_STREAM(USART3_printChar,NULL,_FDEV_SETUP_WRITE); //Usart 
 
-int main(void) //Hovedfunksjonen
+int main(void) 
 {
 	ADC0_init(); //Initialisering av ADC
 	USART3_init(); //Initialisering av USART 
